@@ -1,5 +1,6 @@
 # pip install -U discord.py
 # pip install -U python-dotenv
+
 import os
 import subprocess
 from dotenv import load_dotenv
@@ -19,12 +20,15 @@ bot = commands.Bot(command_prefix='!')
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
-
+    
+# Comands:
+# List all torrents
 @bot.command(name='list', help='List torrents')
 async def list(ctx):
     response = subprocess.run(['transmission-remote', '-l'], capture_output=True)
     await ctx.send(response)
 
+# Download TV Series
 @bot.command(name='serie', help='Download TV Series')
 async def download_serie(ctx, link=''):
     if (link==''):
@@ -33,14 +37,16 @@ async def download_serie(ctx, link=''):
         subprocess.run(['transmission-remote', '-a', link, '-w', '/mnt/plexpi/torrent-complete/series'])
         await ctx.send('Downloading!')
 
-@bot.command(name='filme', help='Download Movies')
-async def download_filme(ctx, link=''):
+# Download Movies
+@bot.command(name='movie', help='Download Movies')
+async def download_movie(ctx, link=''):
     if (link==''):
         await ctx.send('You must send a link.')
     else:
         subprocess.run(['transmission-remote', '-a', link, '-w', '/mnt/plexpi/torrent-complete/filmes'])
         await ctx.send('Downloading!')
 
+# Remove Torrent
 @bot.command(name='remove', help="Remove torrent. Need to put ID'torrent")
 async def download_filme(ctx, id=''):
     if (id==''):
@@ -49,5 +55,5 @@ async def download_filme(ctx, id=''):
         subprocess.run(['transmission-remote', '-t', id, '-r'])
         await ctx.send('Removed!')
 
-
+# Run bot
 bot.run(TOKEN)
