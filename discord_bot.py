@@ -8,6 +8,27 @@ from dotenv import load_dotenv
 from discord.ext import commands
 
 
+# Makes torrent list more presentable
+def process_list_torrent(input):
+
+    # List of input words
+    list = str(input).split()
+
+    # Processed text initialized with the header
+    output = 'Id     Done     Status     Nome\n'
+
+    # List length removing unimportant text from the end
+    list_length = len(list) - 7
+
+    # Run through each torrent
+    for i in range(12, list_length, 10):
+
+        # Concatenate output and torrent information
+        output += list[i] + '      ' + list[i+1] + '     ' + list[i+8] + '    ' + list[i+9] + '\n'
+
+    return output
+
+
 # Load token from environment
 load_dotenv('/home/pi/Desktop/discord.env')
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -25,7 +46,9 @@ async def on_ready():
 # List all torrents
 @bot.command(name='list', help='List torrents')
 async def list(ctx):
-    response = subprocess.run(['transmission-remote', '-l'], capture_output=True)
+    list_torrent = subprocess.run(['transmission-remote', '-l'], capture_output=True)
+    response = process_list_torrent(list_torrent)
+    
     await ctx.send(response)
 
 # Download TV Series
