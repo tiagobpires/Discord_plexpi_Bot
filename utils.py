@@ -1,5 +1,9 @@
+import random
 import subprocess
 from models import Torrent
+
+
+EMOJIS_ENABLE = True
 
 
 def get_torrents():
@@ -55,3 +59,42 @@ def get_torrents():
         torrents.append(torrent)
 
     return torrents
+
+
+def switch_emojis():
+    global EMOJIS_ENABLE
+    if EMOJIS_ENABLE:
+        EMOJIS_ENABLE = False
+        return 'Emojis turn off!'
+    else:
+        EMOJIS_ENABLE = True
+        return 'Emojis turn on!' + get_emoji('good')
+
+
+def get_emoji(type=None):
+    if not EMOJIS_ENABLE:
+        return ''
+
+    good = [
+        'grinning', 'smiley', 'smile', 'grin', 'laughing', 'relaxed', 'blush', 'innocent', 'slight_smile',
+        'upside_down', 'relieved', 'smiling_face_with_3_hearts', 'kissing_heart', 'yum', 'stuck_out_tongue',
+        'stuck_out_tongue_closed_eyes', 'stuck_out_tongue_winking_eye', 'sunglasses', 'nerd', 'star_struck',
+        'partying_face', 'white_check_mark'
+    ]
+
+    bad = [
+        'face_with_monocle', 'face_with_raised_eyebrow', 'slight_frown', 'confused', 'worried', 'pensive',
+        'disappointed', 'frowning2', 'persevere', 'confounded', 'tired_face', 'weary', 'pleading_face', 'triumph',
+        'face_exhaling', 'angry', 'cry', 'sob', 'flushed', 'fearful', 'cold_sweat', 'disappointed_relieved', 'sweat',
+        'grimacing', 'hushed', 'frowning', 'anguished', 'open_mouth', 'neutral_face', 'face_with_spiral_eyes',
+        'dizzy_face', 'woozy_face', 'thermometer_face', 'head_bandage'
+    ]
+
+    if type == 'good':
+        emojis = good
+    elif type == 'bad':
+        emojis = bad
+    else:
+        emojis = good + bad
+
+    return f' :{random.choice(emojis)}:'
